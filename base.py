@@ -31,9 +31,10 @@ def main():
     # Escolher algoritmo
     while True:
         alg = int(input(
-            "Escolha o algoritmo?: [1=FCFS 2=SJF Preemptivo 3=SJF Nao Preemptivo  "
-            "4=Prioridade Preemptivo 5=Prioridade Nao Preemptivo  6=Round_Robin  "
-            "7=Imprime lista de processos 8=Popular processos novamente 9=Sair]: "))
+            "\nMENU:"
+            "\n1. FCFS \n2. SJF Preemptivo \n3. SJF Nao Preemptivo"
+            "\n4. Prioridade Preemptivo \n5. Prioridade Nao Preemptivo \n6. Round_Robin"
+            "\n7. Imprime lista de processos \n8. Popular processos novamente \n9. Sair \nOpção: "))
 
         if alg == 1:  # FCFS
             FCFS(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
@@ -61,11 +62,12 @@ def main():
             imprime_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
 
         elif alg == 9:
+            print("\nFim...")
             break
 
 
 def popular_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
-    aleatorio = int(input("Sera aleatorio?:  "))
+    aleatorio = int(input("\nDigite 1 para gerar os processos automaticamente. \nDigite outro número para inserir os valores manualmente. \nOpção: "))
 
     for i in range(n_processos):
         # Popular Processos Aleatorio
@@ -75,7 +77,7 @@ def popular_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegad
             prioridade[i] = random.randint(1, 15)
         # Popular Processos Manual
         else:
-            tempo_execucao[i] = int(input("Digite o tempo de execucao do processo[" + str(i) + "]:  "))
+            tempo_execucao[i] = int(input("\nDigite o tempo de execucao do processo[" + str(i) + "]:  "))
             tempo_chegada[i] = int(input("Digite o tempo de chegada do processo[" + str(i) + "]:  "))
             prioridade[i] = int(input("Digite a prioridade do processo[" + str(i) + "]:  "))
 
@@ -85,6 +87,7 @@ def popular_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegad
 
 def imprime_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
     # Imprime lista de processos
+    print()
     for i in range(n_processos):
         print("Processo[" + str(i) + "]: tempo_execucao=" + str(tempo_execucao[i]) +
               " tempo_restante=" + str(tempo_restante[i]) +
@@ -98,6 +101,7 @@ def imprime_stats(espera):
 
     tempo_espera_total = 0.0
 
+    print()
     for i in range(n_processos):
         print("Processo[" + str(i) + "]: tempo_espera=" + str(tempo_espera[i]))
         tempo_espera_total = tempo_espera_total + tempo_espera[i]
@@ -112,6 +116,8 @@ def FCFS(execucao, espera, restante, chegada):
     # tempo_chegada = list(chegada)
 
     processo_em_execucao = 0  # processo inicial no FIFO e o zero
+
+    print("\n=== FCFS")
 
     # implementar codigo do FCFS
     for i in range(1, MAXIMO_TEMPO_EXECUCAO):
