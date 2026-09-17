@@ -14,19 +14,21 @@ import random
 
 MAXIMO_TEMPO_EXECUCAO = 65535
 
-n_processos = 3
+# n_processos = 3
 
 
 def main():
+    n_processos = ler_numero_processos()
+
     tempo_execucao = [0] * n_processos
     tempo_chegada = [0] * n_processos
     prioridade = [0] * n_processos
     tempo_espera = [0] * n_processos
     tempo_restante = [0] * n_processos
 
-    popular_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+    popular_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
 
-    imprime_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+    imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
 
     # Escolher algoritmo
     while True:
@@ -37,36 +39,46 @@ def main():
             "\n7. Imprime lista de processos \n8. Popular processos novamente \n9. Sair \nOpção: "))
 
         if alg == 1:  # FCFS
-            FCFS(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
+            FCFS(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
 
         elif alg == 2:  # SJF PREEMPTIVO
-            SJF(True, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
+            SJF(n_processos, True, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
 
         elif alg == 3:  # SJF NAO PREEMPTIVO
-            SJF(False, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
+            SJF(n_processos, False, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
 
         elif alg == 4:  # PRIORIDADE PREEMPTIVO
-            PRIORIDADE(True, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            PRIORIDADE(n_processos, True, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
 
         elif alg == 5:  # PRIORIDADE NAO PREEMPTIVO
-            PRIORIDADE(False, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            PRIORIDADE(n_processos, False, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
 
         elif alg == 6:  # Round_Robin
-            Round_Robin(tempo_execucao, tempo_espera, tempo_restante)
+            Round_Robin(n_processos, tempo_execucao, tempo_espera, tempo_restante)
 
         elif alg == 7:  # IMPRIME CONTEUDO INICIAL DOS PROCESSOS
-            imprime_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
 
         elif alg == 8:  # REATRIBUI VALORES INICIAIS
-            popular_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
-            imprime_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            n_processos = ler_numero_processos()
+            popular_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
 
         elif alg == 9:
             print("\nFim...")
             break
 
+def ler_numero_processos():
+    while True:
+        quantidade = int(input("\nDigite a quantidade de processos [inteiro > zero]: "))
 
-def popular_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
+        if quantidade > 0:
+            return quantidade
+
+        print("Entrada inválida")
+
+
+def popular_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
     aleatorio = int(input("\nDigite 1 para gerar os processos automaticamente. \nDigite outro número para inserir os valores manualmente. \nOpção: "))
 
     for i in range(n_processos):
@@ -85,7 +97,7 @@ def popular_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegad
         tempo_espera[i] = 0
 
 
-def imprime_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
+def imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
     # Imprime lista de processos
     print()
     for i in range(n_processos):
@@ -95,7 +107,7 @@ def imprime_processos(tempo_execucao, tempo_espera, tempo_restante, tempo_chegad
               " prioridade =" + str(prioridade[i]))
 
 
-def imprime_stats(espera):
+def imprime_stats(n_processos, espera):
     tempo_espera = list(espera)
     # Implementar o calculo e impressao de estatisticas
 
@@ -109,7 +121,7 @@ def imprime_stats(espera):
     print("Tempo medio de espera: " + str(tempo_espera_total / n_processos))
 
 
-def FCFS(execucao, espera, restante, chegada):
+def FCFS(n_processos, execucao, espera, restante, chegada):
     tempo_execucao = list(execucao)
     tempo_espera = list(espera)
     tempo_restante = list(restante)
@@ -136,10 +148,10 @@ def FCFS(execucao, espera, restante, chegada):
             tempo_restante[processo_em_execucao] = tempo_restante[processo_em_execucao] - 1
     #
 
-    imprime_stats(tempo_espera)
+    imprime_stats(n_processos, tempo_espera)
 
 
-def SJF(preemptivo, execucao, espera, restante, chegada):
+def SJF(n_processos, preemptivo, execucao, espera, restante, chegada):
     tempo_execucao = list(execucao)
     tempo_espera = list(espera)
     tempo_restante = list(restante)
@@ -149,10 +161,10 @@ def SJF(preemptivo, execucao, espera, restante, chegada):
     # ...
     #
 
-    imprime_stats(tempo_espera)
+    imprime_stats(n_processos, tempo_espera)
 
 
-def PRIORIDADE(preemptivo, execucao, espera, restante, chegada, prioridade):
+def PRIORIDADE(n_processos, preemptivo, execucao, espera, restante, chegada, prioridade):
     tempo_execucao = list(execucao)
     tempo_espera = list(espera)
     tempo_restante = list(restante)
@@ -163,10 +175,10 @@ def PRIORIDADE(preemptivo, execucao, espera, restante, chegada, prioridade):
     # ...
     #
 
-    imprime_stats(tempo_espera)
+    imprime_stats(n_processos, tempo_espera)
 
 
-def Round_Robin(execucao, espera, restante):
+def Round_Robin(n_processos, execucao, espera, restante):
     tempo_execucao = list(execucao)
     tempo_espera = list(espera)
     tempo_restante = list(restante)
@@ -175,7 +187,7 @@ def Round_Robin(execucao, espera, restante):
     # ...
     #
 
-    imprime_stats(tempo_espera)
+    imprime_stats(n_processos, tempo_espera)
 
 
 main()
