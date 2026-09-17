@@ -13,8 +13,15 @@ Simulador de algoritmos de escalonamento de processos, desenvolvido para a disci
 
 ## Como executar
 
+Clone o repositório e acesse a pasta do projeto:
 ```bash
-python base.py
+git clone https://github.com/anebernardy/ifrs-ads-sistemas-operacionais.git
+cd ifrs-ads-sistemas-operacionais
+```
+Execute o programa com:
+```bash
+# macOS/Linux
+python3 base.py
 ```
 
 O programa exibe um menu interativo para cadastrar processos (manual ou aleatório), escolher o algoritmo e visualizar o histórico de execução, tempo de espera e tempo médio de espera.
