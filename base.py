@@ -133,8 +133,10 @@ def FCFS(n_processos, execucao, espera, restante, chegada):
 
     # implementar codigo do FCFS
     for i in range(1, MAXIMO_TEMPO_EXECUCAO):
-        print("tempo[" + str(i) + "]: processo[" + str(processo_em_execucao) + "] restante=" +
-              str(tempo_restante[processo_em_execucao]))
+        #print("tempo[" + str(i) + "]: processo[" + str(processo_em_execucao) + "] restante=" +
+              #str(tempo_restante[processo_em_execucao]))
+
+        print(f'tempo[{i}]: processo[{processo_em_execucao}] restante={tempo_restante[processo_em_execucao]}')
 
         if tempo_execucao[processo_em_execucao] == tempo_restante[processo_em_execucao]:
             tempo_espera[processo_em_execucao] = i - 1
@@ -156,12 +158,15 @@ def SJF(n_processos, preemptivo, execucao, espera, restante, chegada):
     tempo_espera = list(espera)
     tempo_restante = list(restante)
     tempo_chegada = list(chegada)
+    
+    processo_em_execucao = 0  
 
-    # implementar codigo do SJF preemptivo e nao preemptivo
-    # ...
-    #
+    if preemptivo:
+        print("\n=== SJF PREEMPTIVO")
+    else:
+        print("\n=== SJF NÃO PREEMPTIVO")
 
-    imprime_stats(n_processos, tempo_espera)
+    #imprime_stats(n_processos, tempo_espera)
 
 
 def PRIORIDADE(n_processos, preemptivo, execucao, espera, restante, chegada, prioridade):
