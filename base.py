@@ -1,13 +1,6 @@
 """
 Sistemas Operacionais - IFRS Campus Restinga - ADS 3N - 2026/2
 Trabalho de Desenvolvimento: simulador de algoritmos de escalonamento de processos.
-
-Codigo-base em Python. Equivalente ao base.java, com a mesma estrutura de dados
-(listas paralelas), o mesmo menu e a mesma saida.
-
-O FCFS ja vem implementado como exemplo de referencia.
-Cabe a voce implementar: SJF (preemptivo e nao preemptivo), Prioridade
-(preemptivo e nao preemptivo) e Round Robin.
 """
 
 import random
@@ -19,18 +12,9 @@ MAXIMO_TEMPO_EXECUCAO = 65535
 
 def main():
     n_processos = ler_numero_processos()
+    processos = popular_processos(n_processos)
+    imprime_processos(processos)
 
-    tempo_execucao = [0] * n_processos
-    tempo_chegada = [0] * n_processos
-    prioridade = [0] * n_processos
-    tempo_espera = [0] * n_processos
-    tempo_restante = [0] * n_processos
-
-    popular_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
-
-    imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
-
-    # Escolher algoritmo
     while True:
         alg = int(input(
             "\nMENU:"
@@ -39,30 +23,30 @@ def main():
             "\n7. Imprime lista de processos \n8. Popular processos novamente \n9. Sair \nOpção: "))
 
         if alg == 1:  # FCFS
-            FCFS(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
+            FCFS(processos)
 
         elif alg == 2:  # SJF PREEMPTIVO
-            SJF(n_processos, True, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
+            SJF(processos, True)
 
         elif alg == 3:  # SJF NAO PREEMPTIVO
-            SJF(n_processos, False, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada)
+            SJF(processos, False)
 
         elif alg == 4:  # PRIORIDADE PREEMPTIVO
-            PRIORIDADE(n_processos, True, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            PRIORIDADE(processos, True)
 
         elif alg == 5:  # PRIORIDADE NAO PREEMPTIVO
-            PRIORIDADE(n_processos, False, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            PRIORIDADE(processos, False)
 
         elif alg == 6:  # Round_Robin
-            Round_Robin(n_processos, tempo_execucao, tempo_espera, tempo_restante)
+            Round_Robin(processos)
 
         elif alg == 7:  # IMPRIME CONTEUDO INICIAL DOS PROCESSOS
-            imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            imprime_processos(processos)
 
         elif alg == 8:  # REATRIBUI VALORES INICIAIS
             n_processos = ler_numero_processos()
-            popular_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
-            imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade)
+            processos = popular_processos(n_processos)
+            imprime_processos(processos)
 
         elif alg == 9:
             print("\nFim...")
@@ -78,121 +62,118 @@ def ler_numero_processos():
         print("Entrada inválida")
 
 
-def popular_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
+def popular_processos(n_processos):
     aleatorio = int(input("\nDigite 1 para gerar os processos automaticamente. \nDigite outro número para inserir os valores manualmente. \nOpção: "))
+
+    processos = []
 
     for i in range(n_processos):
         # Popular Processos Aleatorio
         if aleatorio == 1:
-            tempo_execucao[i] = random.randint(1, 10)
-            tempo_chegada[i] = random.randint(1, 10)
-            prioridade[i] = random.randint(1, 15)
+            tempo_execucao = random.randint(1, 10)
+            tempo_chegada = random.randint(1, 10)
+            prioridade = random.randint(1, 15)
         # Popular Processos Manual
         else:
-            tempo_execucao[i] = int(input("\nDigite o tempo de execucao do processo[" + str(i) + "]:  "))
-            tempo_chegada[i] = int(input("Digite o tempo de chegada do processo[" + str(i) + "]:  "))
-            prioridade[i] = int(input("Digite a prioridade do processo[" + str(i) + "]:  "))
+            tempo_execucao = int(input(f"\nDigite o tempo de execucao do processo[{i}]: "))
+            tempo_chegada = int(input(f"Digite o tempo de chegada do processo[{i}]: "))
+            prioridade = int(input(f"Digite a prioridade do processo[{i}]: "))
 
-        tempo_restante[i] = tempo_execucao[i]
-        tempo_espera[i] = 0
+        processos.append({
+            "id": i,
+            "tempo_execucao": tempo_execucao,
+            "tempo_chegada": tempo_chegada,
+            "prioridade": prioridade,
+            "tempo_restante": tempo_execucao,
+            "tempo_espera": 0
+        })
+
+    return processos
 
 
-def imprime_processos(n_processos, tempo_execucao, tempo_espera, tempo_restante, tempo_chegada, prioridade):
+def imprime_processos(processos):
     # Imprime lista de processos
     print()
-    for i in range(n_processos):
-        print("Processo[" + str(i) + "]: tempo_execucao=" + str(tempo_execucao[i]) +
-              " tempo_restante=" + str(tempo_restante[i]) +
-              " tempo_chegada=" + str(tempo_chegada[i]) +
-              " prioridade =" + str(prioridade[i]))
+    for p in processos:
+        print(f"Processo[{p['id']}]: "
+            f"tempo_execucao={p['tempo_execucao']} "
+            f"tempo_restante={p['tempo_restante']} "
+            f"tempo_chegada={p['tempo_chegada']} "
+            f"prioridade={p['prioridade']}")
 
 
-def imprime_stats(n_processos, espera):
-    tempo_espera = list(espera)
+def imprime_stats(processos):
     # Implementar o calculo e impressao de estatisticas
 
     tempo_espera_total = 0.0
 
     print()
-    for i in range(n_processos):
-        print("Processo[" + str(i) + "]: tempo_espera=" + str(tempo_espera[i]))
-        tempo_espera_total = tempo_espera_total + tempo_espera[i]
+    for i in processos:
+        print(f"Processo[{i['id']}]: tempo_espera={i['tempo_espera']}")
+        tempo_espera_total += i["tempo_espera"]
 
-    print("Tempo medio de espera: " + str(tempo_espera_total / n_processos))
+    print(f"Tempo medio de espera: {tempo_espera_total / len(processos)}")
 
 
-def FCFS(n_processos, execucao, espera, restante, chegada):
-    tempo_execucao = list(execucao)
-    tempo_espera = list(espera)
-    tempo_restante = list(restante)
-    # tempo_chegada = list(chegada)
+def FCFS(processos):
+    processos_simulacao = [{**p} for p in processos]
+    print("\n=== FCFS")
 
     processo_em_execucao = 0  # processo inicial no FIFO e o zero
 
-    print("\n=== FCFS")
-
-    # implementar codigo do FCFS
     for i in range(1, MAXIMO_TEMPO_EXECUCAO):
-        #print("tempo[" + str(i) + "]: processo[" + str(processo_em_execucao) + "] restante=" +
-              #str(tempo_restante[processo_em_execucao]))
+        processo = processos_simulacao[processo_em_execucao]
 
-        print(f'tempo[{i}]: processo[{processo_em_execucao}] restante={tempo_restante[processo_em_execucao]}')
+        print(f"tempo[{i}]: processo[{processo['id']}] restante={processo['tempo_restante']}")
 
-        if tempo_execucao[processo_em_execucao] == tempo_restante[processo_em_execucao]:
-            tempo_espera[processo_em_execucao] = i - 1
+        if processo['tempo_execucao'] == processo['tempo_restante']:
+            processo['tempo_espera'] = i - 1
 
-        if tempo_restante[processo_em_execucao] == 1:
-            if processo_em_execucao == (n_processos - 1):
+        if processo['tempo_restante'] == 1:
+            if processo_em_execucao == (len(processos_simulacao) - 1):
                 break
             else:
                 processo_em_execucao = processo_em_execucao + 1
         else:
-            tempo_restante[processo_em_execucao] = tempo_restante[processo_em_execucao] - 1
-    #
-
-    imprime_stats(n_processos, tempo_espera)
-
-
-def SJF(n_processos, preemptivo, execucao, espera, restante, chegada):
-    tempo_execucao = list(execucao)
-    tempo_espera = list(espera)
-    tempo_restante = list(restante)
-    tempo_chegada = list(chegada)
+            processo['tempo_restante'] = processo['tempo_restante'] - 1
     
-    processo_em_execucao = 0  
+    imprime_stats(processos_simulacao)
+
+
+def SJF(processos, preemptivo):
+    # consulta IA: criar cópia de dicionário preservando dados originais
+    # desempacotamento de dicionário (**)
+    processos_simulacao = [{**p} for p in processos]
 
     if preemptivo:
         print("\n=== SJF PREEMPTIVO")
+
+        # implementar
+
+        imprime_stats(processos_simulacao)
+
     else:
         print("\n=== SJF NÃO PREEMPTIVO")
 
-    #imprime_stats(n_processos, tempo_espera)
+        # implementar
+
+        imprime_stats(processos_simulacao)
 
 
-def PRIORIDADE(n_processos, preemptivo, execucao, espera, restante, chegada, prioridade):
-    tempo_execucao = list(execucao)
-    tempo_espera = list(espera)
-    tempo_restante = list(restante)
-    tempo_chegada = list(chegada)
-    prioridade_temp = list(prioridade)
+def PRIORIDADE(processos, preemptivo):
+    processos_simulacao = [{**p} for p in processos]
 
     # implementar codigo do Prioridade preemptivo e nao preemptivo
     # ...
     #
 
-    imprime_stats(n_processos, tempo_espera)
 
-
-def Round_Robin(n_processos, execucao, espera, restante):
-    tempo_execucao = list(execucao)
-    tempo_espera = list(espera)
-    tempo_restante = list(restante)
+def Round_Robin(processos):
+    processos_simulacao = [{**p} for p in processos]
 
     # implementar codigo do Round-Robin
     # ...
     #
-
-    imprime_stats(n_processos, tempo_espera)
 
 
 main()
