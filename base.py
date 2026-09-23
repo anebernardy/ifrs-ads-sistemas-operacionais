@@ -144,20 +144,58 @@ def SJF(processos, preemptivo):
     # consulta IA: criar cópia de dicionário preservando dados originais
     # desempacotamento de dicionário (**)
     processos_simulacao = [{**p} for p in processos]
-
+    
     if preemptivo:
         print("\n=== SJF PREEMPTIVO")
 
-        # implementar
-
-        imprime_stats(processos_simulacao)
-
+        imprime_processos(processos_simulacao)
+        print()
+        
     else:
         print("\n=== SJF NÃO PREEMPTIVO")
+        imprime_processos(processos_simulacao)
+        print()
 
-        # implementar
+        cpu_livre = True
+        processos_concluidos = 0
+        processo_em_execucao = {}
 
-        imprime_stats(processos_simulacao)
+        for i in range(1, MAXIMO_TEMPO_EXECUCAO):
+
+            if cpu_livre:
+                menor_tempo_execucao = 11
+
+                for p in processos_simulacao:
+                    if (p['tempo_chegada'] <= i) and (p['tempo_restante'] > 0):
+                        if p['tempo_execucao'] < menor_tempo_execucao:
+                            menor_tempo_execucao = p['tempo_execucao']
+                            processo_em_execucao = p
+                            cpu_livre = False
+
+                            #print()
+                            #print(f'--> Processo[{processo['id']}] - menor tempo de exec: {menor_tempo_execucao} ut')
+                            #print()               
+
+            if not cpu_livre:
+                print(f"tempo[{i}]: processo[{processo_em_execucao['id']}] restante={processo_em_execucao['tempo_restante']}")
+
+                if processo_em_execucao['tempo_execucao'] == processo_em_execucao['tempo_restante']:
+                    processo_em_execucao['tempo_espera'] = i - processo_em_execucao['tempo_chegada']
+
+                if processo_em_execucao['tempo_restante'] == 1:
+                    processo_em_execucao['tempo_restante'] = 0
+                    processos_concluidos += 1
+                    cpu_livre = True
+                    
+                    if processos_concluidos == len(processos_simulacao):
+                        break
+                else:
+                    processo_em_execucao['tempo_restante'] -= 1
+
+            else:
+                print(f'tempo[{i}]: CPU ociosa')
+
+        imprime_stats(processos_simulacao)        
 
 
 def PRIORIDADE(processos, preemptivo):
