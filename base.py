@@ -147,9 +147,50 @@ def SJF(processos, preemptivo):
     
     if preemptivo:
         print("\n=== SJF PREEMPTIVO")
-
         imprime_processos(processos_simulacao)
         print()
+
+        processos_concluidos = 0
+        processo_em_execucao = {}
+
+        for i in range(1, MAXIMO_TEMPO_EXECUCAO):
+            processo_mais_curto = {}
+            menor_tempo_restante = 11111 #refatorar
+
+            if processo_em_execucao and processo_em_execucao['tempo_restante'] > 0:
+                processo_mais_curto = processo_em_execucao
+                menor_tempo_restante = processo_mais_curto['tempo_restante']
+
+            for p in processos_simulacao:
+                if (p['tempo_chegada'] <= i) and (p['tempo_restante'] > 0):
+                    if p['tempo_restante'] < menor_tempo_restante:
+                        menor_tempo_restante = p['tempo_restante']
+                        processo_mais_curto = p
+
+                        #print(f'--> Processo + curto[{processo_mais_curto['id']}] | menor tempo restante: {menor_tempo_restante} ut')
+                    
+            processo_em_execucao = processo_mais_curto
+
+            if processo_em_execucao:
+                print(f"tempo[{i}]: processo[{processo_em_execucao['id']}] restante={processo_em_execucao['tempo_restante']}")
+
+                if processo_em_execucao['tempo_restante'] == 1:
+                    processo_em_execucao['tempo_restante'] = 0
+                    processo_em_execucao['tempo_espera'] = (i + 1) - processo_em_execucao['tempo_chegada'] - processo_em_execucao['tempo_execucao']
+                    processos_concluidos += 1
+
+                    processo_em_execucao = {}
+                    
+                    if processos_concluidos == len(processos_simulacao):
+                        break
+                else:
+                    processo_em_execucao['tempo_restante'] -= 1
+            else:
+                print(f'tempo[{i}]: CPU ociosa')
+
+        imprime_stats(processos_simulacao)
+                
+
         
     else:
         print("\n=== SJF NÃO PREEMPTIVO")
@@ -163,7 +204,7 @@ def SJF(processos, preemptivo):
         for i in range(1, MAXIMO_TEMPO_EXECUCAO):
 
             if cpu_livre:
-                menor_tempo_execucao = 11
+                menor_tempo_execucao = 11111 #refatorar
 
                 for p in processos_simulacao:
                     if (p['tempo_chegada'] <= i) and (p['tempo_restante'] > 0):
@@ -173,7 +214,7 @@ def SJF(processos, preemptivo):
                             cpu_livre = False
 
                             #print()
-                            #print(f'--> Processo[{processo['id']}] - menor tempo de exec: {menor_tempo_execucao} ut')
+                            #print(f'--> Processo[{processo_em_execucao['id']}] - menor tempo de exec: {menor_tempo_execucao} ut')
                             #print()               
 
             if not cpu_livre:
@@ -185,7 +226,8 @@ def SJF(processos, preemptivo):
                 if processo_em_execucao['tempo_restante'] == 1:
                     processo_em_execucao['tempo_restante'] = 0
                     processos_concluidos += 1
-                    cpu_livre = True
+                    cpu_livre = True #refatorar
+                    processo_em_execucao = {}
                     
                     if processos_concluidos == len(processos_simulacao):
                         break
