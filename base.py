@@ -7,6 +7,13 @@ import random
 
 MAXIMO_TEMPO_EXECUCAO = 65535
 
+ID = "id"
+TEMPO_EXECUCAO = "tempo_execucao"
+TEMPO_CHEGADA = "tempo_chegada"
+PRIORIDADE = "prioridade"
+TEMPO_RESTANTE = "tempo_restante"
+TEMPO_ESPERA = "tempo_espera"
+
 # n_processos = 3
 
 
@@ -80,12 +87,12 @@ def popular_processos(n_processos):
             prioridade = int(input(f"Digite a prioridade do processo[{i}]: "))
 
         processos.append({
-            "id": i,
-            "tempo_execucao": tempo_execucao,
-            "tempo_chegada": tempo_chegada,
-            "prioridade": prioridade,
-            "tempo_restante": tempo_execucao,
-            "tempo_espera": 0
+            ID: i,
+            TEMPO_EXECUCAO: tempo_execucao,
+            TEMPO_CHEGADA: tempo_chegada,
+            PRIORIDADE: prioridade,
+            TEMPO_RESTANTE: tempo_execucao,
+            TEMPO_ESPERA: 0
         })
 
     return processos
@@ -94,12 +101,14 @@ def popular_processos(n_processos):
 def imprime_processos(processos):
     # Imprime lista de processos
     print()
-    for p in processos:
-        print(f"Processo[{p['id']}]: "
-            f"tempo_execucao={p['tempo_execucao']} "
-            f"tempo_restante={p['tempo_restante']} "
-            f"tempo_chegada={p['tempo_chegada']} "
-            f"prioridade={p['prioridade']}")
+    for processo in processos:
+        print(
+            f"Processo[{processo[ID]}]: "
+            f"tempo_execucao={processo[TEMPO_EXECUCAO]} "
+            f"tempo_restante={processo[TEMPO_RESTANTE]} "
+            f"tempo_chegada={processo[TEMPO_CHEGADA]} "
+            f"prioridade={processo[PRIORIDADE]}"
+        )
 
 
 def imprime_stats(processos):
@@ -108,9 +117,10 @@ def imprime_stats(processos):
     tempo_espera_total = 0.0
 
     print()
-    for i in processos:
-        print(f"Processo[{i['id']}]: tempo_espera={i['tempo_espera']}")
-        tempo_espera_total += i["tempo_espera"]
+
+    for processo in processos:
+        print(f"Processo[{processo[ID]}]: tempo_espera={processo[TEMPO_ESPERA]}")
+        tempo_espera_total += processo[TEMPO_ESPERA]
 
     print(f"Tempo medio de espera: {tempo_espera_total / len(processos)}")
 
@@ -124,18 +134,18 @@ def FCFS(processos):
     for i in range(1, MAXIMO_TEMPO_EXECUCAO):
         processo = processos_simulacao[processo_em_execucao]
 
-        print(f"tempo[{i}]: processo[{processo['id']}] restante={processo['tempo_restante']}")
+        print(f"tempo[{i}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
 
-        if processo['tempo_execucao'] == processo['tempo_restante']:
-            processo['tempo_espera'] = i - 1
+        if processo[TEMPO_EXECUCAO] == processo[TEMPO_RESTANTE]:
+            processo[TEMPO_ESPERA] = i - 1
 
-        if processo['tempo_restante'] == 1:
+        if processo[TEMPO_RESTANTE] == 1:
             if processo_em_execucao == (len(processos_simulacao) - 1):
                 break
             else:
                 processo_em_execucao = processo_em_execucao + 1
         else:
-            processo['tempo_restante'] = processo['tempo_restante'] - 1
+            processo[TEMPO_RESTANTE] = processo[TEMPO_RESTANTE] - 1
     
     imprime_stats(processos_simulacao)
 
@@ -157,26 +167,25 @@ def SJF(processos, preemptivo):
             processo_mais_curto = {}
             menor_tempo_restante = 11111 #refatorar
 
-            if processo_em_execucao and processo_em_execucao['tempo_restante'] > 0:
+            if processo_em_execucao and processo_em_execucao[TEMPO_RESTANTE] > 0:
                 processo_mais_curto = processo_em_execucao
-                menor_tempo_restante = processo_mais_curto['tempo_restante']
+                menor_tempo_restante = processo_mais_curto[TEMPO_RESTANTE]
 
             for p in processos_simulacao:
-                if (p['tempo_chegada'] <= i) and (p['tempo_restante'] > 0):
-                    if p['tempo_restante'] < menor_tempo_restante:
-                        menor_tempo_restante = p['tempo_restante']
+                if (p[TEMPO_CHEGADA] <= i) and (p[TEMPO_RESTANTE] > 0):
+                    if p[TEMPO_RESTANTE] < menor_tempo_restante:
+                        menor_tempo_restante = p[TEMPO_RESTANTE]
                         processo_mais_curto = p
 
-                        #print(f'--> Processo + curto[{processo_mais_curto['id']}] | menor tempo restante: {menor_tempo_restante} ut')
                     
             processo_em_execucao = processo_mais_curto
 
             if processo_em_execucao:
-                print(f"tempo[{i}]: processo[{processo_em_execucao['id']}] restante={processo_em_execucao['tempo_restante']}")
+                print(f"tempo[{i}]: processo[{processo_em_execucao[ID]}] restante={processo_em_execucao[TEMPO_RESTANTE]}")
 
-                if processo_em_execucao['tempo_restante'] == 1:
-                    processo_em_execucao['tempo_restante'] = 0
-                    processo_em_execucao['tempo_espera'] = (i + 1) - processo_em_execucao['tempo_chegada'] - processo_em_execucao['tempo_execucao']
+                if processo_em_execucao[TEMPO_RESTANTE] == 1:
+                    processo_em_execucao[TEMPO_RESTANTE] = 0
+                    processo_em_execucao[TEMPO_ESPERA] = (i + 1) - processo_em_execucao[TEMPO_CHEGADA] - processo_em_execucao[TEMPO_EXECUCAO]
                     processos_concluidos += 1
 
                     processo_em_execucao = {}
@@ -184,7 +193,7 @@ def SJF(processos, preemptivo):
                     if processos_concluidos == len(processos_simulacao):
                         break
                 else:
-                    processo_em_execucao['tempo_restante'] -= 1
+                    processo_em_execucao[TEMPO_RESTANTE] -= 1
             else:
                 print(f'tempo[{i}]: CPU ociosa')
 
@@ -207,24 +216,20 @@ def SJF(processos, preemptivo):
                 menor_tempo_execucao = 11111 #refatorar
 
                 for p in processos_simulacao:
-                    if (p['tempo_chegada'] <= i) and (p['tempo_restante'] > 0):
-                        if p['tempo_execucao'] < menor_tempo_execucao:
-                            menor_tempo_execucao = p['tempo_execucao']
+                    if (p[TEMPO_CHEGADA] <= i) and (p[TEMPO_RESTANTE] > 0):
+                        if p[TEMPO_EXECUCAO] < menor_tempo_execucao:
+                            menor_tempo_execucao = p[TEMPO_EXECUCAO]
                             processo_em_execucao = p
-                            cpu_livre = False
-
-                            #print()
-                            #print(f'--> Processo[{processo_em_execucao['id']}] - menor tempo de exec: {menor_tempo_execucao} ut')
-                            #print()               
+                            cpu_livre = False        
 
             if not cpu_livre:
-                print(f"tempo[{i}]: processo[{processo_em_execucao['id']}] restante={processo_em_execucao['tempo_restante']}")
+                print(f"tempo[{i}]: processo[{processo_em_execucao[ID]}] restante={processo_em_execucao[TEMPO_RESTANTE]}")
 
-                if processo_em_execucao['tempo_execucao'] == processo_em_execucao['tempo_restante']:
-                    processo_em_execucao['tempo_espera'] = i - processo_em_execucao['tempo_chegada']
+                if processo_em_execucao[TEMPO_EXECUCAO] == processo_em_execucao[TEMPO_RESTANTE]:
+                    processo_em_execucao[TEMPO_ESPERA] = i - processo_em_execucao[TEMPO_CHEGADA]
 
-                if processo_em_execucao['tempo_restante'] == 1:
-                    processo_em_execucao['tempo_restante'] = 0
+                if processo_em_execucao[TEMPO_RESTANTE] == 1:
+                    processo_em_execucao[TEMPO_RESTANTE] = 0
                     processos_concluidos += 1
                     cpu_livre = True #refatorar
                     processo_em_execucao = {}
@@ -232,7 +237,7 @@ def SJF(processos, preemptivo):
                     if processos_concluidos == len(processos_simulacao):
                         break
                 else:
-                    processo_em_execucao['tempo_restante'] -= 1
+                    processo_em_execucao[TEMPO_RESTANTE] -= 1
 
             else:
                 print(f'tempo[{i}]: CPU ociosa')
