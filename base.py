@@ -39,10 +39,10 @@ def main():
             SJF(processos, False)
 
         elif alg == 4:  # PRIORIDADE PREEMPTIVO
-            PRIORIDADE(processos, True)
+            Prioridade(processos, True)
 
         elif alg == 5:  # PRIORIDADE NAO PREEMPTIVO
-            PRIORIDADE(processos, False)
+            Prioridade(processos, False)
 
         elif alg == 6:  # Round_Robin
             Round_Robin(processos)
@@ -121,7 +121,7 @@ def imprime_stats(processos):
             f"Processo[{processo[ID]}]: "
             f"tempo_espera={processo[TEMPO_ESPERA]}"
         )
-        
+
         tempo_espera_total += processo[TEMPO_ESPERA]
 
     tempo_medio_espera = tempo_espera_total / len(processos)
@@ -249,12 +249,19 @@ def SJF(processos, preemptivo):
         imprime_stats(processos_simulacao)        
 
 
-def PRIORIDADE(processos, preemptivo):
+def Prioridade(processos, preemptivo):
     processos_simulacao = [{**p} for p in processos]
 
-    # implementar codigo do Prioridade preemptivo e nao preemptivo
-    # ...
-    #
+    if preemptivo:
+        print("\n=== PRIORIDADE PREEMPTIVO")
+        imprime_processos(processos_simulacao)
+        print()
+
+    else:
+        print("\n=== PRIORIDADE NÃO PREEMPTIVO")
+        imprime_processos(processos_simulacao)
+        print()
+        
 
 
 def Round_Robin(processos):
