@@ -112,17 +112,21 @@ def imprime_processos(processos):
 
 
 def imprime_stats(processos):
-    # Implementar o calculo e impressao de estatisticas
-
     tempo_espera_total = 0.0
 
     print()
 
     for processo in processos:
-        print(f"Processo[{processo[ID]}]: tempo_espera={processo[TEMPO_ESPERA]}")
+        print(
+            f"Processo[{processo[ID]}]: "
+            f"tempo_espera={processo[TEMPO_ESPERA]}"
+        )
+        
         tempo_espera_total += processo[TEMPO_ESPERA]
 
-    print(f"Tempo medio de espera: {tempo_espera_total / len(processos)}")
+    tempo_medio_espera = tempo_espera_total / len(processos)
+
+    print(f"Tempo medio de espera: {tempo_medio_espera}")
 
 
 def FCFS(processos):
