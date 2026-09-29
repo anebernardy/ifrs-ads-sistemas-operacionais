@@ -144,12 +144,14 @@ def FCFS(processos):
             processo[TEMPO_ESPERA] = tempo_atual - 1
 
         if processo[TEMPO_RESTANTE] == 1:
+            processo[TEMPO_RESTANTE] = 0
+
             if processo_em_execucao == (len(processos_simulacao) - 1):
                 break
-            else:
-                processo_em_execucao = processo_em_execucao + 1
+            
+            processo_em_execucao += 1
         else:
-            processo[TEMPO_RESTANTE] = processo[TEMPO_RESTANTE] - 1
+            processo[TEMPO_RESTANTE] -= 1
     
     imprime_stats(processos_simulacao)
 
