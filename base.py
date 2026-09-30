@@ -53,14 +53,19 @@ def main():
             print("\nFim...")
             break
 
+
 def ler_numero_processos():
     while True:
-        quantidade = int(input("\nDigite a quantidade de processos [inteiro > zero]: "))
+        try:
+            quantidade = int(input("\nQuantidade de processos na simulação: "))
 
-        if quantidade > 0:
-            return quantidade
+            if quantidade > 0:
+                return quantidade
 
-        print("Entrada inválida")
+            print("\nEntrada inválida. O número deve ser maior que zero.")
+
+        except ValueError:
+            print("\nEntrada inválida. Digite um número inteiro.")
 
 
 def ler_opcao_menu():
