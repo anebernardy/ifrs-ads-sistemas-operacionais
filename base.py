@@ -259,6 +259,50 @@ def Prioridade(processos, preemptivo):
         imprime_processos(processos_simulacao)
         print()
 
+        processos_concluidos = 0
+        processo_em_execucao = {}
+
+        for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+            processo_escolhido = {}
+            menor_valor_prioridade = 11111
+
+            if processo_em_execucao and processo_em_execucao[TEMPO_RESTANTE] > 0:
+                processo_escolhido = processo_em_execucao
+                menor_valor_prioridade = processo_em_execucao[PRIORIDADE]
+
+            for processo in processos_simulacao:
+                if (processo[TEMPO_CHEGADA] <= tempo_atual) and (processo[TEMPO_RESTANTE] > 0):
+                    if processo[PRIORIDADE] < menor_valor_prioridade:
+                        menor_valor_prioridade = processo[PRIORIDADE]
+                        processo_escolhido = processo
+
+                    
+            processo_em_execucao = processo_escolhido
+
+            if processo_em_execucao:
+                print(
+                    f"tempo[{tempo_atual}]: "
+                    f"processo[{processo_em_execucao[ID]}] "
+                    f"prioridade={processo_em_execucao[PRIORIDADE]} "
+                    f"restante={processo_em_execucao[TEMPO_RESTANTE]}"
+                )
+
+                if processo_em_execucao[TEMPO_RESTANTE] == 1:
+                    processo_em_execucao[TEMPO_RESTANTE] = 0
+                    processo_em_execucao[TEMPO_ESPERA] = (tempo_atual + 1) - processo_em_execucao[TEMPO_CHEGADA] - processo_em_execucao[TEMPO_EXECUCAO]
+                    processos_concluidos += 1
+
+                    processo_em_execucao = {}
+                    
+                    if processos_concluidos == len(processos_simulacao):
+                        break
+                else:
+                    processo_em_execucao[TEMPO_RESTANTE] -= 1
+            else:
+                print(f'tempo[{tempo_atual}]: CPU ociosa')
+
+        imprime_stats(processos_simulacao)
+
     else:
         print("\n=== PRIORIDADE NÃO PREEMPTIVO")
         imprime_processos(processos_simulacao)
@@ -294,7 +338,7 @@ def Prioridade(processos, preemptivo):
                 if processo_em_execucao[TEMPO_RESTANTE] == 1:
                     processo_em_execucao[TEMPO_RESTANTE] = 0
                     processos_concluidos += 1
-                    cpu_livre = True #refatorar
+                    cpu_livre = True
                     processo_em_execucao = {}
                     
                     if processos_concluidos == len(processos_simulacao):
