@@ -23,11 +23,7 @@ def main():
     imprime_processos(processos)
 
     while True:
-        alg = int(input(
-            "\nMENU:"
-            "\n1. FCFS \n2. SJF Preemptivo \n3. SJF Nao Preemptivo"
-            "\n4. Prioridade Preemptivo \n5. Prioridade Nao Preemptivo \n6. Round_Robin"
-            "\n7. Imprime lista de processos \n8. Popular processos novamente \n9. Sair \nOpção: "))
+        alg = ler_opcao_menu()
 
         if alg == 1:  # FCFS
             FCFS(processos)
@@ -67,6 +63,36 @@ def ler_numero_processos():
             return quantidade
 
         print("Entrada inválida")
+
+
+def ler_opcao_menu():
+    while True:
+        try:
+            opcao = int(input(
+                "\n------------------------------"
+                "\nMENU"
+                "\n------------------------------"
+                "\n1. FCFS"
+                "\n2. SJF preemptivo"
+                "\n3. SJF não preemptivo"
+                "\n4. Prioridade preemptivo"
+                "\n5. Prioridade não preemptivo"
+                "\n6. Round Robin"
+                "\n------------------------------"
+                "\n7. Imprimir lista de processos"
+                "\n8. Popular processos novamente"
+                "\n9. Sair"
+                "\n------------------------------"
+                "\nOpção: "
+            ))
+
+            if 1 <= opcao <= 9:
+                return opcao
+
+            print("\nOpção inválida. Digite um número de 1 a 9.")
+
+        except ValueError:
+            print("\nOpção inválida, tente novamente.")
 
 
 def popular_processos(n_processos):
