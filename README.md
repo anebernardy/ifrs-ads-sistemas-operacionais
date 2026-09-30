@@ -7,8 +7,8 @@ Simulador de algoritmos de escalonamento de processos, desenvolvido para a disci
 - [x] FCFS
 - [x] SJF Não-Preemptivo
 - [x] SJF Preemptivo
-- [ ] Prioridade Não-Preemptivo
-- [ ] Prioridade Preemptivo
+- [x] Prioridade Não-Preemptivo
+- [x] Prioridade Preemptivo
 - [ ] Round-Robin
 
 ## Como executar
