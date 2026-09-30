@@ -72,20 +72,20 @@ def ler_opcao_menu():
     while True:
         try:
             opcao = int(input(
-                "\n------------------------------"
+                "\n----------------------------------"
                 "\nMENU"
-                "\n------------------------------"
+                "\n----------------------------------"
                 "\n1. FCFS"
                 "\n2. SJF preemptivo"
                 "\n3. SJF não preemptivo"
                 "\n4. Prioridade preemptivo"
                 "\n5. Prioridade não preemptivo"
                 "\n6. Round Robin"
-                "\n------------------------------"
+                "\n----------------------------------"
                 "\n7. Imprimir lista de processos"
                 "\n8. Popular processos novamente"
                 "\n9. Sair"
-                "\n------------------------------"
+                "\n----------------------------------"
                 "\nOpção: "
             ))
 
@@ -160,9 +160,16 @@ def imprime_stats(processos):
 
 def FCFS(processos):
     processos_simulacao = [{**p} for p in processos]
-    print("\n=== FCFS")
 
-    processo_em_execucao = 0  # processo inicial no FIFO e o zero
+    print(
+        "\n----------------------------------"
+        "\n1. FCFS"
+        "\n----------------------------------"
+    )
+    imprime_processos(processos_simulacao)
+    print()
+
+    processo_em_execucao = 0
 
     for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
         processo = processos_simulacao[processo_em_execucao]
@@ -191,7 +198,11 @@ def SJF(processos, preemptivo):
     processos_simulacao = [{**p} for p in processos]
     
     if preemptivo:
-        print("\n=== SJF PREEMPTIVO")
+        print(
+            "\n----------------------------------"
+            "\n2. SJF PREEMPTIVO"
+            "\n----------------------------------"
+        )
         imprime_processos(processos_simulacao)
         print()
 
@@ -237,7 +248,11 @@ def SJF(processos, preemptivo):
 
         
     else:
-        print("\n=== SJF NÃO PREEMPTIVO")
+        print(
+            "\n----------------------------------"
+            "\n3. SJF NÃO PREEMPTIVO"
+            "\n----------------------------------"
+        )
         imprime_processos(processos_simulacao)
         print()
 
@@ -284,7 +299,11 @@ def Prioridade(processos, preemptivo):
     processos_simulacao = [{**p} for p in processos]
 
     if preemptivo:
-        print("\n=== PRIORIDADE PREEMPTIVO")
+        print(
+            "\n----------------------------------"
+            "\n4. PRIORIDADE PREEMPTIVO"
+            "\n----------------------------------"
+        )
         imprime_processos(processos_simulacao)
         print()
 
@@ -333,7 +352,11 @@ def Prioridade(processos, preemptivo):
         imprime_stats(processos_simulacao)
 
     else:
-        print("\n=== PRIORIDADE NÃO PREEMPTIVO")
+        print(
+            "\n----------------------------------"
+            "\n5. PRIORIDADE NÃO PREEMPTIVO"
+            "\n----------------------------------"
+        )
         imprime_processos(processos_simulacao)
         print()
 
@@ -383,6 +406,14 @@ def Prioridade(processos, preemptivo):
 
 def Round_Robin(processos):
     processos_simulacao = [{**p} for p in processos]
+
+    print(
+            "\n----------------------------------"
+            "\n5. ROUND ROBIN"
+            "\n----------------------------------"
+        )
+    imprime_processos(processos_simulacao)
+    print()
 
     # implementar codigo do Round-Robin
     # ...
