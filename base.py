@@ -14,8 +14,6 @@ PRIORIDADE = "prioridade"
 TEMPO_RESTANTE = "tempo_restante"
 TEMPO_ESPERA = "tempo_espera"
 
-# n_processos = 3
-
 
 def main():
     n_processos = ler_numero_processos()
@@ -25,28 +23,28 @@ def main():
     while True:
         alg = ler_opcao_menu()
 
-        if alg == 1:  # FCFS
+        if alg == 1:
             FCFS(processos)
 
-        elif alg == 2:  # SJF PREEMPTIVO
-            SJF(processos, True)
+        elif alg == 2:
+            SJF(processos, preemptivo=True)
 
-        elif alg == 3:  # SJF NAO PREEMPTIVO
-            SJF(processos, False)
+        elif alg == 3:
+            SJF(processos, preemptivo=False)
 
-        elif alg == 4:  # PRIORIDADE PREEMPTIVO
-            Prioridade(processos, True)
+        elif alg == 4:
+            Prioridade(processos, preemptivo=True)
 
-        elif alg == 5:  # PRIORIDADE NAO PREEMPTIVO
-            Prioridade(processos, False)
+        elif alg == 5:
+            Prioridade(processos, preemptivo=False)
 
-        elif alg == 6:  # Round_Robin
+        elif alg == 6:
             Round_Robin(processos)
 
-        elif alg == 7:  # IMPRIME CONTEUDO INICIAL DOS PROCESSOS
+        elif alg == 7:
             imprime_processos(processos)
 
-        elif alg == 8:  # REATRIBUI VALORES INICIAIS
+        elif alg == 8:  # POPULAR PROCESSOS NOVAMENTE
             n_processos = ler_numero_processos()
             processos = popular_processos(n_processos)
             imprime_processos(processos)
