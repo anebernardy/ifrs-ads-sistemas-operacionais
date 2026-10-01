@@ -309,6 +309,10 @@ def SJF(processos, preemptivo):
 def Prioridade(processos, preemptivo):
     processos_simulacao = [{**p} for p in processos]
 
+    # consulta IA: ordenar lista de dicionarios tendo como critério o valor de uma de suas chaves
+    # ordenação com a função sorted e uma função chave (lambda)
+    fila_chegada = sorted(processos_simulacao, key=lambda p: p[TEMPO_CHEGADA])
+
     if preemptivo:
         print(
             "\n----------------------------------"
@@ -329,11 +333,22 @@ def Prioridade(processos, preemptivo):
                 processo_escolhido = processo_em_execucao
                 menor_valor_prioridade = processo_em_execucao[PRIORIDADE]
 
-            for processo in processos_simulacao:
+            for processo in fila_chegada:
                 if (processo[TEMPO_CHEGADA] <= tempo_atual) and (processo[TEMPO_RESTANTE] > 0):
                     if processo[PRIORIDADE] < menor_valor_prioridade:
                         menor_valor_prioridade = processo[PRIORIDADE]
                         processo_escolhido = processo
+
+                    '''
+                    else: # TESTANDO
+                        if processo[PRIORIDADE] == menor_valor_prioridade and processo is not processo_escolhido:
+                            print(
+                                f'\n--------> tempo({tempo_atual}) empate prioridade -> '
+                                f'P{processo_escolhido[ID]} chegou {processo_escolhido[TEMPO_CHEGADA]}, '
+                                f'P{processo[ID]} chegou {processo[TEMPO_CHEGADA]}'
+                            )
+                            print()
+                    '''
 
             processo_em_execucao = processo_escolhido
 
@@ -379,12 +394,12 @@ def Prioridade(processos, preemptivo):
             if cpu_livre:
                 menor_valor_prioridade = 11111
 
-                for processo in processos_simulacao:
+                for processo in fila_chegada:
                     if (processo[TEMPO_CHEGADA] <= tempo_atual) and (processo[TEMPO_RESTANTE] > 0):
                         if processo[PRIORIDADE] < menor_valor_prioridade:
                             menor_valor_prioridade = processo[PRIORIDADE]
                             processo_em_execucao = processo
-                            cpu_livre = False        
+                            cpu_livre = False
 
             if not cpu_livre:
                 print(
