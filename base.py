@@ -16,6 +16,12 @@ TEMPO_ESPERA = "tempo_espera"
 
 
 def main():
+    print(
+        "\n======================================"
+        "\nSIMULADOR: ESCALONAMENTO DE PROCESSOS"
+        "\n======================================"
+    )
+
     n_processos = ler_numero_processos()
     processos = popular_processos(n_processos)
     imprime_processos(processos)
@@ -99,7 +105,12 @@ def ler_opcao_menu():
 
 
 def popular_processos(n_processos):
-    aleatorio = int(input("\nDigite 1 para gerar os processos automaticamente. \nDigite outro número para inserir os valores manualmente. \nOpção: "))
+    aleatorio = int(input(
+        "\nEntrada de dados"
+        "\n1. Gerar valores aleatórios"
+        "\n2. Informar valores manualmente"
+        "\nOpção: "
+    ))
 
     processos = []
 
@@ -324,7 +335,6 @@ def Prioridade(processos, preemptivo):
                         menor_valor_prioridade = processo[PRIORIDADE]
                         processo_escolhido = processo
 
-                    
             processo_em_execucao = processo_escolhido
 
             if processo_em_execucao:
@@ -409,7 +419,7 @@ def Round_Robin(processos):
 
     print(
             "\n----------------------------------"
-            "\n5. ROUND ROBIN"
+            "\n6. ROUND ROBIN"
             "\n----------------------------------"
         )
     imprime_processos(processos_simulacao)
