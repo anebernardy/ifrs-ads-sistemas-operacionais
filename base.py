@@ -168,6 +168,19 @@ def imprime_stats(processos):
 
     print(f"Tempo medio de espera: {tempo_medio_espera}")
 
+def ler_quantum():
+    while True:
+        try:
+            quantum = int(input("\nQuantum (valor mínimo 1): "))
+
+            if quantum >= 1:
+                return quantum
+
+            print("\nEntrada inválida. O quantum deve ser maior ou igual a 1.")
+
+        except ValueError:
+            print("\nEntrada inválida. Digite um número inteiro.")
+
 
 def FCFS(processos):
     processos_simulacao = [{**p} for p in processos]
@@ -438,9 +451,10 @@ def Round_Robin(processos):
             "\n----------------------------------"
         )
     imprime_processos(processos_simulacao)
+
+    quantum = ler_quantum()
     print()
 
-    quantum = 2
     processos_concluidos = 0
     processo_em_execucao = 0
     fatia_usada = 0
