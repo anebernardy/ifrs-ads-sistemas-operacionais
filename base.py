@@ -168,6 +168,7 @@ def imprime_stats(processos):
 
     print(f"Tempo medio de espera: {tempo_medio_espera}")
 
+
 def ler_quantum():
     while True:
         try:
@@ -183,7 +184,7 @@ def ler_quantum():
 
 
 def FCFS(processos):
-    processos_simulacao = [{**p} for p in processos]
+    processos_simulacao = [{**p, TEMPO_CHEGADA: 0} for p in processos]
 
     print(
         "\n----------------------------------"
@@ -195,13 +196,13 @@ def FCFS(processos):
 
     processo_em_execucao = 0
 
-    for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+    for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
         processo = processos_simulacao[processo_em_execucao]
 
         print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
 
         if processo[TEMPO_EXECUCAO] == processo[TEMPO_RESTANTE]:
-            processo[TEMPO_ESPERA] = tempo_atual - 1
+            processo[TEMPO_ESPERA] = tempo_atual - processo[TEMPO_CHEGADA]
 
         if processo[TEMPO_RESTANTE] == 1:
             processo[TEMPO_RESTANTE] = 0
@@ -233,7 +234,7 @@ def SJF(processos, preemptivo):
         processos_concluidos = 0
         processo_em_execucao = {}
 
-        for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+        for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
             processo_mais_curto = {}
             menor_tempo_restante = 11111 #refatorar
 
@@ -284,7 +285,7 @@ def SJF(processos, preemptivo):
         processos_concluidos = 0
         processo_em_execucao = {}
 
-        for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+        for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
 
             if cpu_livre:
                 menor_tempo_execucao = 11111 #refatorar
@@ -338,7 +339,7 @@ def Prioridade(processos, preemptivo):
         processos_concluidos = 0
         processo_em_execucao = {}
 
-        for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+        for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
             processo_escolhido = {}
             menor_valor_prioridade = 11111
 
@@ -402,7 +403,7 @@ def Prioridade(processos, preemptivo):
         processos_concluidos = 0
         processo_em_execucao = {}
 
-        for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+        for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
 
             if cpu_livre:
                 menor_valor_prioridade = 11111
@@ -443,7 +444,7 @@ def Prioridade(processos, preemptivo):
 
 
 def Round_Robin(processos):
-    processos_simulacao = [{**p} for p in processos]
+    processos_simulacao = [{**p, TEMPO_CHEGADA: 0} for p in processos]
 
     print(
             "\n----------------------------------"
@@ -459,7 +460,7 @@ def Round_Robin(processos):
     processo_em_execucao = 0
     fatia_usada = 0
 
-    for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+    for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
         processo = processos_simulacao[processo_em_execucao]
 
         print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
