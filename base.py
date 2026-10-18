@@ -467,9 +467,9 @@ def Round_Robin(processos):
 
         fatia_usada += 1
 
-        for outro in processos_simulacao:
-            if outro is not processo and outro[TEMPO_RESTANTE] > 0:
-                outro[TEMPO_ESPERA] += 1
+        for processo_em_espera in processos_simulacao:
+            if processo_em_espera is not processo and processo_em_espera[TEMPO_RESTANTE] > 0:
+                processo_em_espera[TEMPO_ESPERA] += 1
 
         if processo[TEMPO_RESTANTE] == 1:
             processo[TEMPO_RESTANTE] = 0
