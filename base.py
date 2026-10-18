@@ -440,9 +440,42 @@ def Round_Robin(processos):
     imprime_processos(processos_simulacao)
     print()
 
-    # implementar codigo do Round-Robin
-    # ...
-    #
+    quantum = 2
+    processos_concluidos = 0
+    processo_em_execucao = 0
+    fatia_usada = 0
+
+    for tempo_atual in range(1, MAXIMO_TEMPO_EXECUCAO):
+        processo = processos_simulacao[processo_em_execucao]
+
+        print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
+
+        fatia_usada += 1
+
+        for outro in processos_simulacao:
+            if outro is not processo and outro[TEMPO_RESTANTE] > 0:
+                outro[TEMPO_ESPERA] += 1
+
+        if processo[TEMPO_RESTANTE] == 1:
+            processo[TEMPO_RESTANTE] = 0
+            processos_concluidos += 1
+
+            if processos_concluidos == len(processos_simulacao):
+                break
+
+        else:
+            processo[TEMPO_RESTANTE] -= 1
+
+        if processo[TEMPO_RESTANTE] == 0 or fatia_usada == quantum:
+            fatia_usada = 0
+
+            for _ in range(len(processos_simulacao)):
+                processo_em_execucao = (processo_em_execucao + 1) % len(processos_simulacao)
+
+                if processos_simulacao[processo_em_execucao][TEMPO_RESTANTE] > 0:
+                    break
+
+    imprime_stats(processos_simulacao)
 
 
 main()
