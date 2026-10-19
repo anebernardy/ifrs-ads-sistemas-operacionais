@@ -458,18 +458,21 @@ def Round_Robin(processos):
 
     processos_concluidos = 0
     indice_em_execucao = 0
-    fatia_usada = 0
+    unidades_da_fatia = 0
 
     for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
         processo = processos_simulacao[indice_em_execucao]
 
+        if unidades_da_fatia == 0:
+            unidades_da_fatia = min(quantum, processo[TEMPO_RESTANTE])
+
+            for processo_em_espera in processos_simulacao:
+                if processo_em_espera is not processo and processo_em_espera[TEMPO_RESTANTE] > 0:
+                    processo_em_espera[TEMPO_ESPERA] += unidades_da_fatia
+
         print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
 
-        fatia_usada += 1
-
-        for processo_em_espera in processos_simulacao:
-            if processo_em_espera is not processo and processo_em_espera[TEMPO_RESTANTE] > 0:
-                processo_em_espera[TEMPO_ESPERA] += 1
+        unidades_da_fatia -= 1
 
         if processo[TEMPO_RESTANTE] == 1:
             processo[TEMPO_RESTANTE] = 0
@@ -481,11 +484,13 @@ def Round_Robin(processos):
         else:
             processo[TEMPO_RESTANTE] -= 1
 
-        if processo[TEMPO_RESTANTE] == 0 or fatia_usada == quantum:
-            fatia_usada = 0
+        if unidades_da_fatia == 0:
 
             for _ in range(len(processos_simulacao)):
-                indice_em_execucao = (indice_em_execucao + 1) % len(processos_simulacao)
+                indice_em_execucao += 1
+
+                if indice_em_execucao == len(processos_simulacao):
+                    indice_em_execucao = 0
 
                 if processos_simulacao[indice_em_execucao][TEMPO_RESTANTE] > 0:
                     break
