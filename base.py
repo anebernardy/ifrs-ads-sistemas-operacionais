@@ -194,10 +194,10 @@ def FCFS(processos):
     imprime_processos(processos_simulacao)
     print()
 
-    processo_em_execucao = 0
+    indice_em_execucao = 0
 
     for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
-        processo = processos_simulacao[processo_em_execucao]
+        processo = processos_simulacao[indice_em_execucao]
 
         print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
 
@@ -207,10 +207,10 @@ def FCFS(processos):
         if processo[TEMPO_RESTANTE] == 1:
             processo[TEMPO_RESTANTE] = 0
 
-            if processo_em_execucao == (len(processos_simulacao) - 1):
+            if indice_em_execucao == (len(processos_simulacao) - 1):
                 break
             
-            processo_em_execucao += 1
+            indice_em_execucao += 1
         else:
             processo[TEMPO_RESTANTE] -= 1
     
@@ -457,11 +457,11 @@ def Round_Robin(processos):
     print()
 
     processos_concluidos = 0
-    processo_em_execucao = 0
+    indice_em_execucao = 0
     fatia_usada = 0
 
     for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
-        processo = processos_simulacao[processo_em_execucao]
+        processo = processos_simulacao[indice_em_execucao]
 
         print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
 
@@ -485,9 +485,9 @@ def Round_Robin(processos):
             fatia_usada = 0
 
             for _ in range(len(processos_simulacao)):
-                processo_em_execucao = (processo_em_execucao + 1) % len(processos_simulacao)
+                indice_em_execucao = (indice_em_execucao + 1) % len(processos_simulacao)
 
-                if processos_simulacao[processo_em_execucao][TEMPO_RESTANTE] > 0:
+                if processos_simulacao[indice_em_execucao][TEMPO_RESTANTE] > 0:
                     break
 
     imprime_stats(processos_simulacao)
