@@ -191,6 +191,7 @@ def FCFS(processos):
         "\n1. FCFS"
         "\n----------------------------------"
     )
+    print("\nObs.: neste algoritmo todos os processos são simulados com chegada em t=0.")
     imprime_processos(processos_simulacao)
     print()
 
@@ -451,6 +452,7 @@ def Round_Robin(processos):
             "\n6. ROUND ROBIN"
             "\n----------------------------------"
         )
+    print("\nObs.: neste algoritmo todos os processos são simulados com chegada em t=0.")
     imprime_processos(processos_simulacao)
 
     quantum = ler_quantum()
