@@ -341,11 +341,10 @@ def Prioridade(processos, preemptivo):
         processo_em_execucao = {}
 
         for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
-            processo_escolhido = {}
+            processo_escolhido = processo_em_execucao
             menor_valor_prioridade = 11111
 
-            if processo_em_execucao and processo_em_execucao[TEMPO_RESTANTE] > 0:
-                processo_escolhido = processo_em_execucao
+            if processo_em_execucao:
                 menor_valor_prioridade = processo_em_execucao[PRIORIDADE]
 
             for processo in fila_chegada:
