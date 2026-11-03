@@ -400,13 +400,12 @@ def Prioridade(processos, preemptivo):
         imprime_processos(processos_simulacao)
         print()
 
-        cpu_livre = True
         processos_concluidos = 0
         processo_em_execucao = {}
 
         for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
 
-            if cpu_livre:
+            if not processo_em_execucao:
                 menor_valor_prioridade = 11111
 
                 for processo in fila_chegada:
@@ -414,9 +413,8 @@ def Prioridade(processos, preemptivo):
                         if processo[PRIORIDADE] < menor_valor_prioridade:
                             menor_valor_prioridade = processo[PRIORIDADE]
                             processo_em_execucao = processo
-                            cpu_livre = False
 
-            if not cpu_livre:
+            if processo_em_execucao:
                 print(
                     f"tempo[{tempo_atual}]: "
                     f"processo[{processo_em_execucao[ID]}] "
@@ -424,20 +422,17 @@ def Prioridade(processos, preemptivo):
                     f"restante={processo_em_execucao[TEMPO_RESTANTE]}"
                 )
 
-                if processo_em_execucao[TEMPO_EXECUCAO] == processo_em_execucao[TEMPO_RESTANTE]:
-                    processo_em_execucao[TEMPO_ESPERA] = tempo_atual - processo_em_execucao[TEMPO_CHEGADA]
-
                 if processo_em_execucao[TEMPO_RESTANTE] == 1:
                     processo_em_execucao[TEMPO_RESTANTE] = 0
+                    processo_em_execucao[TEMPO_ESPERA] = (tempo_atual + 1) - processo_em_execucao[TEMPO_CHEGADA] - processo_em_execucao[TEMPO_EXECUCAO]
                     processos_concluidos += 1
-                    cpu_livre = True
+
                     processo_em_execucao = {}
-                    
+
                     if processos_concluidos == len(processos_simulacao):
                         break
                 else:
                     processo_em_execucao[TEMPO_RESTANTE] -= 1
-
             else:
                 print(f'tempo[{tempo_atual}]: CPU ociosa')
 
