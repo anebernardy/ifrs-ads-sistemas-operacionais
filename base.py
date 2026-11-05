@@ -386,7 +386,7 @@ def Prioridade(processos, preemptivo):
                 else:
                     processo_em_execucao[TEMPO_RESTANTE] -= 1
             else:
-                print(f'tempo[{tempo_atual}]: CPU ociosa')
+                print(f"tempo[{tempo_atual}]: CPU ociosa")
 
         imprime_stats(processos_simulacao)
 
@@ -433,7 +433,7 @@ def Prioridade(processos, preemptivo):
                 else:
                     processo_em_execucao[TEMPO_RESTANTE] -= 1
             else:
-                print(f'tempo[{tempo_atual}]: CPU ociosa')
+                print(f"tempo[{tempo_atual}]: CPU ociosa")
 
         imprime_stats(processos_simulacao)
 
@@ -452,44 +452,27 @@ def Round_Robin(processos):
     quantum = ler_quantum()
     print()
 
+    tempo_atual = 0
     processos_concluidos = 0
-    indice_em_execucao = 0
-    unidades_da_fatia = 0
 
-    for tempo_atual in range(0, MAXIMO_TEMPO_EXECUCAO):
-        processo = processos_simulacao[indice_em_execucao]
+    while processos_concluidos < len(processos_simulacao):
+        
+        for processo in processos_simulacao:
+            
+            if processo[TEMPO_RESTANTE] > 0:
+                fatia = min(quantum, processo[TEMPO_RESTANTE])
 
-        if unidades_da_fatia == 0:
-            unidades_da_fatia = min(quantum, processo[TEMPO_RESTANTE])
+                for processo_em_espera in processos_simulacao:
+                    if processo_em_espera is not processo and processo_em_espera[TEMPO_RESTANTE] > 0:
+                        processo_em_espera[TEMPO_ESPERA] += fatia
 
-            for processo_em_espera in processos_simulacao:
-                if processo_em_espera is not processo and processo_em_espera[TEMPO_RESTANTE] > 0:
-                    processo_em_espera[TEMPO_ESPERA] += unidades_da_fatia
+                for ut in range(fatia):
+                    print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
+                    processo[TEMPO_RESTANTE] -= 1
+                    tempo_atual += 1
 
-        print(f"tempo[{tempo_atual}]: processo[{processo[ID]}] restante={processo[TEMPO_RESTANTE]}")
-
-        unidades_da_fatia -= 1
-
-        if processo[TEMPO_RESTANTE] == 1:
-            processo[TEMPO_RESTANTE] = 0
-            processos_concluidos += 1
-
-            if processos_concluidos == len(processos_simulacao):
-                break
-
-        else:
-            processo[TEMPO_RESTANTE] -= 1
-
-        if unidades_da_fatia == 0:
-
-            for _ in range(len(processos_simulacao)):
-                indice_em_execucao += 1
-
-                if indice_em_execucao == len(processos_simulacao):
-                    indice_em_execucao = 0
-
-                if processos_simulacao[indice_em_execucao][TEMPO_RESTANTE] > 0:
-                    break
+                if processo[TEMPO_RESTANTE] == 0:
+                    processos_concluidos += 1
 
     imprime_stats(processos_simulacao)
 
